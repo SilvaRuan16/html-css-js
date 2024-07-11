@@ -10,7 +10,7 @@ function onChangePassword() {
 
 function isEmailValid() {
     const email = form.email().value;
-    if(!email) {
+    if (!email) {
         return false;
     }
     return validateEmail(email);
@@ -18,7 +18,7 @@ function isEmailValid() {
 
 function isPasswordValid() {
     const password = form.password().value;
-    if(!password) {
+    if (!password) {
         return false;
     }
     return true;
@@ -42,7 +42,7 @@ function toggleButtonDisable() {
     form.recoverPassword().disabled = !emailValid;
 
     const passwordValid = isPasswordValid();
-    form.recoverPassword().disabled = !emailValid || !passwordValid;
+    form.loginButton().disabled = !emailValid || !passwordValid;
 }
 
 const form = {
@@ -51,5 +51,25 @@ const form = {
     emailInvalidError: () => document.getElementById('email-invalid-error'),
     password: () => document.getElementById('password'),
     passwordRequiredError: () => document.getElementById('password-required-error'),
-    recoverPassword: () => document.getElementById('recover-password-button')
+    recoverPassword: () => document.getElementById('recover-password-button'),
+    loginButton: () => document.getElementById('login-button')
+}
+
+function login() {
+    firebase.auth().signInWithEmailAndPassword(form.email().value, form.password().value).then(response => {
+        location.href = 'pages/home/home.html';
+    },).catch(error => {
+        alert(getErrorMessage(error));
+    },);
+}
+
+function register() {
+    location.href = 'pages/register/register.html';
+}
+
+function getErrorMessage(error) {
+    if (error.code == 'auth/invalid-credential') {
+        return 'Usuário não encontrado';
+    }
+    return error.message;
 }

@@ -19,21 +19,36 @@
         </div>
         <div class="form-field">
             <div><label>Senha</label></div>
-            <input type="password" onchange="onChangePassword()" name="password" id="password" placeholder="sua senha aqui">
+            <input type="password" onchange="onChangePassword()" name="password" id="password"
+                placeholder="sua senha aqui">
             <div class="error" id="password-required-error">Senha obrigatória</div>
         </div>
         <div>
             <button class="clear" id="recover-password-button" type="button" disabled="true">Recuperar senha</button>
         </div>
         <div>
-            <button class="solid" type="button" id="login-button" disabled="true">Entrar</button>
+            <button class="solid" type="button" id="login-button" disabled="true" onclick="login()">Entrar</button>
         </div>
         <div>
-            <button class="outline" type="button">Registrar</button>
+            <button class="outline" type="button" onclick="register()">Registrar</button>
         </div>
     </form>
     <script src="index.js"></script>
     <script src="validations.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTG1EdRfzQ9pXsvtcAkVDb4me9e8w2BDI",
+            authDomain: "controlede-gastos.firebaseapp.com",
+            projectId: "controlede-gastos",
+            storageBucket: "controlede-gastos.appspot.com",
+            messagingSenderId: "728618973283",
+            appId: "1:728618973283:web:cf3cf548d4e8851e06e056"
+        };
+        firebase.initializeApp(firebaseConfig);
+        
+    </script>
 </body>
 
 </html>
