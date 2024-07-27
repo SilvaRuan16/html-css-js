@@ -45,20 +45,13 @@ function toggleButtonDisable() {
     form.loginButton().disabled = !emailValid || !passwordValid;
 }
 
-const form = {
-    email: () => document.getElementById('email'),
-    emailRequiredError: () => document.getElementById('email-required-error'),
-    emailInvalidError: () => document.getElementById('email-invalid-error'),
-    password: () => document.getElementById('password'),
-    passwordRequiredError: () => document.getElementById('password-required-error'),
-    recoverPassword: () => document.getElementById('recover-password-button'),
-    loginButton: () => document.getElementById('login-button')
-}
-
 function login() {
+    showLoading();
     firebase.auth().signInWithEmailAndPassword(form.email().value, form.password().value).then(response => {
+        hideLoading();
         location.href = 'pages/home/home.html';
     },).catch(error => {
+        hideLoading();
         alert(getErrorMessage(error));
     },);
 }
@@ -67,9 +60,38 @@ function register() {
     location.href = 'pages/register/register.html';
 }
 
+function recoverPassword() {
+    showLoading();
+    firebase.auth().sendPasswordResetEmail(form.email().value).then(() => {
+        hideLoading();
+        alert('email enviado com sucesso');
+    }).catch(error => {
+        hideLoading();
+        alert(getErrorMessage(error));
+    });
+}
+
 function getErrorMessage(error) {
-    if (error.code == 'auth/invalid-credential') {
+    if (error.code === 'auth/invalid-credential') {
         return 'Usuário não encontrado';
+    } else if (error.code === 'auth/invalid-email') {
+        return 'E-mail inválido';
     }
     return error.message;
 }
+
+const form = {
+    email: () => document.querySelector('#email'),
+    emailRequiredError: () => document.querySelector('#email-required-error'),
+    emailInvalidError: () => document.querySelector('#email-invalid-error'),
+    password: () => document.querySelector('#password'),
+    passwordRequiredError: () => document.querySelector('#password-required-error'),
+    recoverPassword: () => document.querySelector('#recover-password-button'),
+    loginButton: () => document.querySelector('#login-button')
+}
+
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        location.href = 'pages/home/home.html';
+    }
+})
